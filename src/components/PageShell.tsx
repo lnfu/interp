@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './PageShell.module.css';
 
 interface Props {
@@ -15,7 +15,7 @@ export default function PageShell({
   title, badge, badgeColor = 'var(--accent-blue)',
   formulas, visualization, controls, numerics,
 }: Props) {
-  const [formulasOpen, setFormulasOpen] = useState(true);
+
 
   return (
     <div className={styles.page}>
@@ -30,15 +30,7 @@ export default function PageShell({
       {/* Formula section */}
       {formulas && (
         <section className={styles.section}>
-          <button
-            className={styles.collapseBtn}
-            onClick={() => setFormulasOpen((v) => !v)}
-          >
-            {formulasOpen ? '▾' : '▸'} Mathematical Background
-          </button>
-          {formulasOpen && (
-            <div className={styles.formulaContent}>{formulas}</div>
-          )}
+          <div className={styles.formulaContent}>{formulas}</div>
         </section>
       )}
 
