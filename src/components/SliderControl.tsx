@@ -18,10 +18,7 @@ export default function SliderControl({
 }: Props) {
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <span className={styles.label}>{label}</span>
-        <span className={styles.value}>{value.toFixed(3)}</span>
-      </div>
+      <span className={styles.label}>{label}</span>
       <div className={styles.row}>
         <input
           type="range"
@@ -30,6 +27,7 @@ export default function SliderControl({
           onChange={(e) => onChange(parseFloat(e.target.value))}
           className={styles.slider}
         />
+        <span className={styles.value}>{value.toFixed(3)}</span>
         {onTogglePlay && (
           <button
             onClick={onTogglePlay}

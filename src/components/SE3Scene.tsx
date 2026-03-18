@@ -20,9 +20,9 @@ interface Props {
 
 function applyX4(obj: THREE.Object3D, X: number[]) {
   const m4 = new THREE.Matrix4().set(
-    X[0],  X[1],  X[2],  X[3],
-    X[4],  X[5],  X[6],  X[7],
-    X[8],  X[9],  X[10], X[11],
+    X[0], X[1], X[2], X[3],
+    X[4], X[5], X[6], X[7],
+    X[8], X[9], X[10], X[11],
     X[12], X[13], X[14], X[15],
   );
   const p = new THREE.Vector3();
@@ -34,11 +34,11 @@ function applyX4(obj: THREE.Object3D, X: number[]) {
 }
 
 function readX4(obj: THREE.Object3D): number[] {
-  const m4 = new THREE.Matrix4().compose(obj.position, obj.quaternion, new THREE.Vector3(1,1,1));
+  const m4 = new THREE.Matrix4().compose(obj.position, obj.quaternion, new THREE.Vector3(1, 1, 1));
   const e = m4.elements;
   return [
-    e[0], e[4], e[8],  e[12],
-    e[1], e[5], e[9],  e[13],
+    e[0], e[4], e[8], e[12],
+    e[1], e[5], e[9], e[13],
     e[2], e[6], e[10], e[14],
     e[3], e[7], e[11], e[15],
   ];
@@ -89,28 +89,28 @@ function SceneContent({ X0, X1, Xs, overlayXs, overlayColor, activeTarget, gizmo
     const ctrl = controlsRef.current;
     if (!ctrl) return;
     const onDown = () => { isDragging.current = true; };
-    const onUp   = () => {
+    const onUp = () => {
       isDragging.current = false;
       const activeRef = activeTarget === 'start' ? ref0 : ref1;
-      const cb        = activeTarget === 'start' ? cb0  : cb1;
+      const cb = activeTarget === 'start' ? cb0 : cb1;
       if (activeRef.current) cb.current(readX4(activeRef.current));
     };
     ctrl.addEventListener('mouseDown', onDown);
-    ctrl.addEventListener('mouseUp',   onUp);
+    ctrl.addEventListener('mouseUp', onUp);
     return () => {
       ctrl.removeEventListener('mouseDown', onDown);
-      ctrl.removeEventListener('mouseUp',   onUp);
+      ctrl.removeEventListener('mouseUp', onUp);
     };
   }, [activeTarget, gizmoMode, controlsRef, isDragging, cb0, cb1]);
 
   const activeRef = activeTarget === 'start' ? ref0 : ref1;
-  const activeCb  = activeTarget === 'start' ? cb0  : cb1;
+  const activeCb = activeTarget === 'start' ? cb0 : cb1;
 
   return (
     <>
       <group ref={ref0}><PoseObject color="#4a9eff" opacity={0.6} /></group>
       <group ref={ref1}><PoseObject color="#ff6b6b" opacity={0.6} /></group>
-      <group ref={refS}><PoseObject color="#51cf66" opacity={1}   /></group>
+      <group ref={refS}><PoseObject color="#51cf66" opacity={1} /></group>
       {overlayXs && <group ref={refO}><PoseObject color={overlayColor} opacity={0.7} wireframe /></group>}
 
       <TransformControls
@@ -127,10 +127,10 @@ function SceneContent({ X0, X1, Xs, overlayXs, overlayColor, activeTarget, gizmo
 
 export default function SE3Scene({ X0, X1, Xs, onX0Change, onX1Change, overlayXs, overlayColor = '#ffd43b' }: Props) {
   const [activeTarget, setActiveTarget] = useState<'start' | 'end'>('start');
-  const [gizmoMode, setGizmoMode]       = useState<'translate' | 'rotate'>('rotate');
+  const [gizmoMode, setGizmoMode] = useState<'translate' | 'rotate'>('rotate');
 
   const controlsRef = useRef<any>(null);
-  const isDragging  = useRef(false);
+  const isDragging = useRef(false);
 
   const cb0 = useRef(onX0Change);
   const cb1 = useRef(onX1Change);
@@ -138,8 +138,8 @@ export default function SE3Scene({ X0, X1, Xs, onX0Change, onX1Change, overlayXs
   useEffect(() => { cb1.current = onX1Change; });
 
   return (
-    <div>
-      <Scene3D height={460}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <Scene3D>
         <SceneContent
           X0={X0} X1={X1} Xs={Xs}
           overlayXs={overlayXs}
@@ -153,15 +153,15 @@ export default function SE3Scene({ X0, X1, Xs, onX0Change, onX1Change, overlayXs
         />
       </Scene3D>
 
-      <div style={{ display: 'flex', gap: 8, marginTop: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: 8, padding: '6px 8px', flexWrap: 'wrap', alignItems: 'center', background: 'var(--bg-panel)', borderTop: '1px solid var(--border)' }}>
         <button onClick={() => setActiveTarget('start')} style={{ borderColor: '#4a9eff', color: activeTarget === 'start' ? '#fff' : '#4a9eff', background: activeTarget === 'start' ? '#4a9eff' : undefined }}>
-          Gizmo: Start
+          Start
         </button>
         <button onClick={() => setActiveTarget('end')} style={{ borderColor: '#ff6b6b', color: activeTarget === 'end' ? '#fff' : '#ff6b6b', background: activeTarget === 'end' ? '#ff6b6b' : undefined }}>
-          Gizmo: End
+          End
         </button>
         <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>|</span>
-        <button onClick={() => setGizmoMode('rotate')}    className={gizmoMode === 'rotate'    ? 'active' : ''}>Rotate</button>
+        <button onClick={() => setGizmoMode('rotate')} className={gizmoMode === 'rotate' ? 'active' : ''}>Rotate</button>
         <button onClick={() => setGizmoMode('translate')} className={gizmoMode === 'translate' ? 'active' : ''}>Translate</button>
       </div>
     </div>

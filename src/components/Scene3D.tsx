@@ -9,9 +9,10 @@ interface Props {
   height?: number;
 }
 
-export default function Scene3D({ children, height = 460 }: Props) {
+export default function Scene3D({ children, height }: Props) {
+  const style = height !== undefined ? { height } : { flex: 1, minHeight: 0 };
   return (
-    <div className={styles.canvas} style={{ height }}>
+    <div className={styles.canvas} style={style}>
       <Canvas
         camera={{ position: [5, 3, 5], fov: 50 }}
         gl={{ antialias: true }}

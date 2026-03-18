@@ -59,12 +59,16 @@ export default function SE3ScLERPPage() {
   }, []);
 
   const togglePlay = useCallback(() => {
-    setIsPlaying((prev) => {
-      if (prev) { if (rafRef.current) cancelAnimationFrame(rafRef.current); lastTimeRef.current = null; return false; }
+    if (isPlaying) {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      lastTimeRef.current = null;
+      setIsPlaying(false);
+    } else {
+      lastTimeRef.current = null;
       rafRef.current = requestAnimationFrame(animate);
-      return true;
-    });
-  }, [animate]);
+      setIsPlaying(true);
+    }
+  }, [isPlaying, animate]);
 
   useEffect(() => () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); }, []);
 
